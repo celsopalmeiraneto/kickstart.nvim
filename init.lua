@@ -166,6 +166,10 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Trust and source project-local .nvim.lua files
+-- See `:help 'exrc'`
+vim.o.exrc = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -462,7 +466,27 @@ require('lazy').setup({
     end,
   },
 
-  -- LSP Plugins
+  -- Markdown Preview
+  {
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    build = function()
+      require('lazy').load { plugins = { 'markdown-preview.nvim' } }
+      vim.fn['mkdp#util#install']()
+    end,
+    keys = {
+      {
+        '<leader>cp',
+        ft = 'markdown',
+        '<cmd>MarkdownPreviewToggle<cr>',
+        desc = 'Markdown Preview',
+      },
+    },
+    config = function()
+      vim.cmd [[do FileType]]
+    end,
+  },
+
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
